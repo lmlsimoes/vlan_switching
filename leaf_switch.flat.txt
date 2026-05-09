@@ -27,13 +27,31 @@ set / interface ethernet-1/6 subinterface 10 admin-state enable
 set / interface ethernet-1/6 subinterface 10 vlan encap single-tagged vlan-id 10
 
 # configuring the layer2 service (mac-vrf) for client1
-set / network-instance l2_cliente_a type mac-vrf
-set / network-instance l2_cliente_a admin-state enable
-set / network-instance l2_cliente_a interface ethernet-1/1.101
-set / network-instance l2_cliente_a interface ethernet-1/5.10
+set / network-instance l2_cliente1 type mac-vrf
+set / network-instance l2_cliente1 admin-state enable
+set / network-instance l2_cliente1 interface ethernet-1/1.101
+set / network-instance l2_cliente1 interface ethernet-1/5.10
 
 # configuring the layer2 service (mac-vrf) for client2
-set / network-instance l2_cliente_b type mac-vrf
-set / network-instance l2_cliente_b admin-state enable
-set / network-instance l2_cliente_b interface ethernet-1/1.102
-set / network-instance l2_cliente_b interface ethernet-1/6.10
+set / network-instance l2_cliente2 type mac-vrf
+set / network-instance l2_cliente2 admin-state enable
+set / network-instance l2_cliente2 interface ethernet-1/1.102
+set / network-instance l2_cliente2 interface ethernet-1/6.10
+
+# configure the irb interface to add an IPv4 address in the switch fr client1
+set / interface irb1 admin-state enable
+set / interface irb1 subinterface 1 ipv4 admin-state enable
+set / interface irb1 subinterface 1 ipv4 address 10.10.10.254/24
+set / network-instance l2_cliente1 interface irb1.1
+set / network-instance l3_client1 type ip-vrf
+set / network-instance l3_client1 admin-state enable
+set / network-instance l3_client1 interface irb1.1
+
+# configure the irb interface to add an IPv4 address in the switch
+set / interface irb2 admin-state enable
+set / interface irb2 subinterface 1 ipv4 admin-state enable
+set / interface irb2 subinterface 1 ipv4 address 10.10.10.253/24
+set / network-instance l2_cliente2 interface irb2.1
+set / network-instance l3_client2 type ip-vrf
+set / network-instance l3_client2 admin-state enable
+set / network-instance l3_client2 interface irb2.1

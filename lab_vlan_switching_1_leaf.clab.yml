@@ -1,4 +1,5 @@
-name: lab_vlan_switching_1_leaf
+name: vlan-switching-1-leaf
+prefix: ""
 
 topology:
   kinds:
