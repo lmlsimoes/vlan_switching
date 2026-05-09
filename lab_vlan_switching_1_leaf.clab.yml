@@ -1,0 +1,60 @@
+name: lab_vlan_switching_1_leaf
+
+topology:
+  kinds:
+    nokia_srlinux:
+      image: ghcr.io/nokia/srlinux:26.3.1
+      type: ixr-d3l
+    linux:
+      image: ghcr.io/srl-labs/network-multitool
+
+  nodes:
+    leaf_switch:
+      kind: nokia_srlinux
+      mgmt-ipv4: 172.20.20.11
+      startup-config: leaf_switch.flat.txt
+      ports:
+        - 1122:22
+        - 57411:57400
+
+    firewall_a:
+      kind: linux
+      mgmt-ipv4: 172.20.20.101
+      binds:
+        - create_vlan_namespace.sh:/tmp/create_vlan_namespace.sh
+      exec:
+          # create namespace for client1 and add routes
+        - bash /tmp/create_vlan_namespace.sh eth1 10 10.10.10.101/24
+      env:
+        PS1: '\u@\h:\w\$ '
+
+    firewall_b:
+      kind: linux
+      mgmt-ipv4: 172.20.20.102
+      binds:
+        - create_vlan_namespace.sh:/tmp/create_vlan_namespace.sh
+      exec:
+          # create namespace for client2 and add routes
+          # same IP subnet and VLAN ID is used to confirm there is isolation
+        - bash /tmp/create_vlan_namespace.sh eth1 10 10.10.10.102/24
+      env:
+        PS1: '\u@\h:\w\$ '
+
+    nutanix:
+      kind: linux
+      mgmt-ipv4: 172.20.20.103
+      binds:
+        - create_vlan_namespace.sh:/tmp/create_vlan_namespace.sh
+      exec:
+          # create first namespace for client1 and add routes
+        - bash /tmp/create_vlan_namespace.sh eth1 101 10.10.10.201/24
+
+          # create first namespace for client2 and add routes
+        - bash /tmp/create_vlan_namespace.sh eth1 102 10.10.10.202/24
+      env:
+        PS1: "\\u@\\h:\\w\\$ "
+
+  links:
+    - endpoints: [ "leaf_switch:e1-1", "nutanix:eth1" ]
+    - endpoints: [ "leaf_switch:e1-5", "firewall_a:eth1" ]
+    - endpoints: [ "leaf_switch:e1-6", "firewall_b:eth1" ]

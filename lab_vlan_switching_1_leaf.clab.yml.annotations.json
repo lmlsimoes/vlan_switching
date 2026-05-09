@@ -1,0 +1,41 @@
+{
+  "freeTextAnnotations": [],
+  "freeShapeAnnotations": [],
+  "trafficRateAnnotations": [],
+  "groupStyleAnnotations": [],
+  "networkNodeAnnotations": [],
+  "nodeAnnotations": [
+    {
+      "id": "leaf_switch",
+      "interfacePattern": "e1-{n}",
+      "position": {
+        "x": 420,
+        "y": 320
+      }
+    },
+    {
+      "id": "firewall_a",
+      "position": {
+        "x": 280,
+        "y": 260
+      }
+    },
+    {
+      "id": "firewall_b",
+      "position": {
+        "x": 280,
+        "y": 380
+      }
+    },
+    {
+      "id": "nutanix",
+      "position": {
+        "x": 560,
+        "y": 320
+      }
+    }
+  ],
+  "edgeAnnotations": [],
+  "aliasEndpointAnnotations": [],
+  "viewerSettings": {}
+}
